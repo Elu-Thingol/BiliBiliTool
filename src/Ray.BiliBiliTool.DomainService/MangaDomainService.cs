@@ -73,12 +73,19 @@ namespace Ray.BiliBiliTool.DomainService
             }
 
             int day = DateTime.Today.Day;
+            int targetDay = _dailyTaskOptions.DayOfReceiveVipPrivilege == -1
+                ? 1
+                : _dailyTaskOptions.DayOfReceiveVipPrivilege;
 
-            if (day != _dailyTaskOptions.DayOfReceiveVipPrivilege)
+            _logger.LogInformation("【目标领取日期】{targetDay}号", targetDay);
+            _logger.LogInformation("【今天】{day}号", DateTime.Today.Day);
+
+            if (day != targetDay
+                && day != DateTime.Today.LastDayOfMonth().Day)
             {
                 //一个月执行一次就行
-                _logger.LogInformation("【目标日期】{target}号", _dailyTaskOptions.DayOfReceiveVipPrivilege);
-                _logger.LogInformation("【今天】{day}号", day);
+                //_logger.LogInformation("【目标日期】{target}号", _dailyTaskOptions.DayOfReceiveVipPrivilege);
+                //_logger.LogInformation("【今天】{day}号", day);
                 _logger.LogInformation("跳过");
                 return;
             }
